@@ -92,6 +92,12 @@ class AutoWs extends EventEmitter {
     }
   }
 
+  sendUnbuffered(d) {
+    if (this._connection && this._connection.readyState === WebSocket.OPEN) {
+      this._connection.send(d);
+    }
+  }
+
   destroy() {
     this._live = false;
 
