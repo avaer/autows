@@ -52,8 +52,8 @@ class AutoWs extends EventEmitter {
       result.onerror = err => {
         console.warn(err);
       };
-      result.onmessage = m => {
-        this.emit('message', m);
+      result.onmessage = (msg, flags) => {
+        this.emit('message', msg, flags);
       };
       return result;
     })();
