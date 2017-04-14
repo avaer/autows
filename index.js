@@ -22,6 +22,7 @@ class AutoWs extends EventEmitter {
   connect() { 
     const connection = (() => {
       const result = new WebSocket(this.url);
+      result.binaryType = 'arraybuffer';
       result.onopen = () => {
         // console.log('connection opened');
 
