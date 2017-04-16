@@ -10,6 +10,7 @@ class AutoWs extends EventEmitter {
 
     this.url = url;
 
+    this._live = true;
     this._connection = null;
     this._lastConnectTime = -Infinity;
     this._numReconnects = 0;
