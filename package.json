@@ -1,6 +1,6 @@
 {
   "name": "autows",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Automatic reconnecting websocket frontend",
   "main": "index.js",
   "scripts": {
