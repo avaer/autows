@@ -22,11 +22,11 @@ class AutoWs extends EventEmitter {
 
   connect() { 
     const connection = (() => {
+      let opened = false;
+
       const result = new WebSocket(this.url);
       result.binaryType = 'arraybuffer';
       result.onopen = () => {
-        // console.log('connection opened');
-
         this._connection = connection;
         this._numReconnects = 0;
 
@@ -37,12 +37,19 @@ class AutoWs extends EventEmitter {
           this._queue.length = 0;
         }
 
+        if (!opened) {
+          this.emit('open');
+          opened = true;
+        }
+
         this.emit('connect');
       };
       result.onclose = () => {
-        // console.log('connection closed');
-
         this.emit('disconnect');
+
+        if (opened) {
+          this.emit('close');
+        }
 
         this._connection = null;
 
@@ -51,7 +58,7 @@ class AutoWs extends EventEmitter {
         }
       };
       result.onerror = err => {
-        console.warn(err);
+        this.emit('error', err);
       };
       result.onmessage = (msg, flags) => {
         this.emit('message', msg, flags);
