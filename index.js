@@ -20,11 +20,17 @@ class AutoWs extends EventEmitter {
     this.connect();
   }
 
-  connect() { 
+  static configure(newConfig) {
+    for (const k in newConfig) {
+      this.config[k] = newConfig[k];
+    }
+  }
+
+  connect() {
     const connection = (() => {
       let opened = false;
 
-      const result = new WebSocket(this.url);
+      const result = new AutoWs.config.WebSocket(this.url);
       result.binaryType = 'arraybuffer';
       result.onopen = () => {
         this._connection = connection;
@@ -95,7 +101,7 @@ class AutoWs extends EventEmitter {
   }
 
   send(d) {
-    if (this._connection && this._connection.readyState === WebSocket.OPEN) {
+    if (this._connection && this._connection.readyState === AutoWs.config.WebSocket.OPEN) {
       this._connection.send(d);
     } else {
       this._queue.push(d);
@@ -103,7 +109,7 @@ class AutoWs extends EventEmitter {
   }
 
   sendUnbuffered(d) {
-    if (this._connection && this._connection.readyState === WebSocket.OPEN) {
+    if (this._connection && this._connection.readyState === AutoWs.config.WebSocket.OPEN) {
       this._connection.send(d);
     }
   }
@@ -121,5 +127,8 @@ class AutoWs extends EventEmitter {
     }
   }
 }
+AutoWs.config = {
+  WebSocket: typeof WebSocket !== 'undefined' ? WebSocket : null,
+};
 
 module.exports = AutoWs;
