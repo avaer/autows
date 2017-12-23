@@ -2,7 +2,7 @@
   "name": "autows",
   "version": "0.0.10",
   "description": "Automatic reconnecting websocket frontend",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,7 +17,8 @@
   },
   "homepage": "https://github.com/modulesio/autows#readme",
   "dependencies": {
-    "events": "^1.1.1"
+    "events": "^1.1.1",
+    "ws": "^3.3.3"
   },
   "devDependencies": {
     "rollup": "^0.45.2",

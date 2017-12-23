@@ -2,7 +2,7 @@ const resolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs');
 
 module.exports = {
-	entry: 'index.js',
+	entry: 'client.js',
 	format: 'cjs',
 	plugins: [
 		resolve({
