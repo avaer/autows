@@ -90,8 +90,12 @@ class AutoWs extends EventEmitter {
           }
         }
       });
+      c.on('error', err => {
+        c2.emit('error', err);
+      });
 
-      this.emit('connection', new AutoWsConnection(this, '', c), req);
+      const c2 = new AutoWsConnection(this, '', c);
+      this.emit('connection', c2, req);
     });
   }
 
