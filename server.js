@@ -69,9 +69,6 @@ class AutoWs extends EventEmitter {
 
   handleUpgrade(req, socket, head) {
     this.wss.handleUpgrade(req, socket, head, c => {
-      const c2 = new AutoWsConnection(this, '', c);
-      const channels = [c2];
-
       c._readSubsocket = '';
       c._writeSubsocket = '';
       c.on('message', m => {
@@ -82,9 +79,7 @@ class AutoWs extends EventEmitter {
           const channelMessage = _parseChannelMessage(m);
           if (channelMessage !== null) {
             if (this._channels[channelMessage]) {
-              const c2 = new AutoWsConnection(this, channelMessage, c);
-              channels.push(c2);
-              this._channels[channelMessage].emit('connection', c2, req);
+              this._channels[channelMessage].emit('connection', new AutoWsConnection(this, channelMessage, c), req);
             } else {
               console.warn('autows got binding request for nonexistent channel', channelMessage);
 
@@ -95,14 +90,11 @@ class AutoWs extends EventEmitter {
           }
         }
       });
-      c.on('close', () => {
-        for (let i = 0; i < channels.length; i++) {
-          channels[i].emit('close');
-        }
-      });
       c.on('error', err => {
         c2.emit('error', err);
       });
+
+      const c2 = new AutoWsConnection(this, '', c);
       this.emit('connection', c2, req);
     });
   }
